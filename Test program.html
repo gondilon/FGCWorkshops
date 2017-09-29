@@ -1,0 +1,237 @@
+<html>
+<head>
+<title>Test program</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+.s0 { color: rgb(0,0,128); font-weight: bold; }
+.s1 { color: rgb(0,0,0); }
+.s2 { color: rgb(128,128,128); font-style: italic; }
+.s3 { color: rgb(0,128,128); font-weight: bold; }
+.s4 { color: rgb(0,0,255); }
+</style>
+</head>
+<BODY BGCOLOR="#ffffff">
+<TABLE CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<TR><TD><CENTER>
+<FONT FACE="Arial, Helvetica" COLOR="#000000">
+Test program</FONT>
+</center></TD></TR></TABLE>
+<pre>
+<span class="s0">import </span><span class="s1">pandas </span><span class="s0">as </span><span class="s1">pd 
+</span><span class="s0">import </span><span class="s1">random 
+ 
+</span><span class="s2">#import csv master workshop list into DataFrame.</span><span class="s1"> 
+</span><span class="s2">#import registrants with workshop choices DataFrame</span><span class="s1"> 
+</span><span class="s2">#import workshop list with maximum sizes</span><span class="s1"> 
+registrants = pd.read_csv(</span><span class="s3">&quot;c:</span><span class="s0">\\</span><span class="s3">Users</span><span class="s0">\\</span><span class="s3">Carl</span><span class="s0">\\</span><span class="s3">Desktop</span><span class="s0">\\</span><span class="s3">Test_Workshop_Data.csv&quot;</span><span class="s1">, encoding = </span><span class="s3">&quot;utf-8&quot;</span><span class="s1">) 
+print(registrants) 
+ 
+workshop_list = pd.read_csv(</span><span class="s3">&quot;c:</span><span class="s0">\\</span><span class="s3">Users</span><span class="s0">\\</span><span class="s3">Carl</span><span class="s0">\\</span><span class="s3">Desktop</span><span class="s0">\\</span><span class="s3">Test_Workshop_List.csv&quot;</span><span class="s1">, encoding = </span><span class="s3">&quot;utf-8&quot;</span><span class="s1">) 
+print(workshop_list) 
+ 
+ 
+</span><span class="s2">#Print imports to verify. Require user input to continue. Give option to reimport.</span><span class="s1"> 
+ 
+workshop_assignments= pd.DataFrame() 
+ 
+second_choices= pd.DataFrame() 
+ 
+first_choice_col = </span><span class="s4">3</span><span class="s1"> 
+second_choice_col = </span><span class="s4">4</span><span class="s1"> 
+ 
+</span><span class="s0">def </span><span class="s1">split_workshop (registered, wksp_num, choice): 
+    </span><span class="s2">#split out individual workshop into single_workshop dataframe</span><span class="s1"> 
+    dd =[] 
+    </span><span class="s0">for </span><span class="s1">i </span><span class="s0">in </span><span class="s1">range(len(registered.index)): 
+        </span><span class="s0">if </span><span class="s1">registered.loc[i][choice] == workshop_list.loc[wksp_num-</span><span class="s4">1</span><span class="s1">][</span><span class="s4">0</span><span class="s1">]: 
+            </span><span class="s2">#print(registrants.loc[i][2])</span><span class="s1"> 
+            </span><span class="s2">#print(registrants.loc[i][3])</span><span class="s1"> 
+            dd.append(registered.iloc[i]) 
+            </span><span class="s2">#print(dd)</span><span class="s1"> 
+ 
+    single_workshop = pd.DataFrame(dd) 
+    </span><span class="s2">#print(single_workshop)</span><span class="s1"> 
+ 
+    </span><span class="s0">return </span><span class="s1">single_workshop 
+ 
+ 
+ 
+ 
+</span><span class="s0">def </span><span class="s1">check_workshop(wksp_num, workshop_roster): 
+    </span><span class="s2">#check if workshop is full.</span><span class="s1"> 
+ 
+    registered =len(workshop_roster.index) </span><span class="s2">#number of people registered for the workshop.</span><span class="s1"> 
+    max_register = max_enrolles(wksp_num) </span><span class="s2">#Registration cap.</span><span class="s1"> 
+    </span><span class="s2">#print(&quot;This workshop has&quot;, registered, &quot;registered, and it's max is&quot;, max_register)</span><span class="s1"> 
+    </span><span class="s0">if </span><span class="s1">(max_register &lt; registered): </span><span class="s2">#Check if the workshop is overfilled</span><span class="s1"> 
+        </span><span class="s2">#above = len(workshop_roster.index)- max_register #amount the workshop is overfilled</span><span class="s1"> 
+        </span><span class="s2">#print(&quot;This workshop is overfilled by :&quot;, above)</span><span class="s1"> 
+        </span><span class="s2">#proposed_workshop = second_choice( wksp_num, workshop_roster, above)</span><span class="s1"> 
+        </span><span class="s2">#randomly assigns people from this workshop to their second choice</span><span class="s1"> 
+        </span><span class="s2">#until the workshop is at its max capacity.</span><span class="s1"> 
+        </span><span class="s2">#return proposed_workshop</span><span class="s1"> 
+        </span><span class="s0">return True</span><span class="s1"> 
+    </span><span class="s0">else</span><span class="s1">: 
+ 
+        </span><span class="s2">#workshop_final.drop(workshop_final.columns[4], axis = 1, inplace= True)</span><span class="s1"> 
+        </span><span class="s0">return False</span><span class="s1"> 
+ 
+</span><span class="s0">def </span><span class="s1">assign_workshop(workshop_enrolled, workshop_number): 
+    column_assign = </span><span class="s3">'assignment'</span><span class="s1"> 
+    </span><span class="s2">#print (len(workshop_enrolled))</span><span class="s1"> 
+    </span><span class="s0">for </span><span class="s1">d </span><span class="s0">in </span><span class="s1">range(len(workshop_enrolled.index)): 
+        workshop_enrolled.set_value(workshop_enrolled.index[d], column_assign, workshop_number) 
+    </span><span class="s0">return </span><span class="s1">workshop_enrolled 
+</span><span class="s0">def </span><span class="s1">second_choice (wksp_num, second_list, max_register): 
+    reduction_size = len(second_list.index)- max_register  </span><span class="s2"># amount the workshop is overfilled</span><span class="s1"> 
+    print(</span><span class="s3">&quot;This workshop is overfilled by :&quot;</span><span class="s1">, reduction_size) 
+    </span><span class="s2">#For each workshop in list, check if second choice is full.</span><span class="s1"> 
+    top = len(second_list.index) - </span><span class="s4">1 </span><span class="s2">#number of people in the workhop.</span><span class="s1"> 
+    </span><span class="s2">#start = second_list.index[0]  #number to start random generation on.</span><span class="s1"> 
+    start = </span><span class="s4">0</span><span class="s1"> 
+    already_chosen = </span><span class="s4">0</span><span class="s1"> 
+    storerow = []  </span><span class="s2">#people to be assigned to second choice</span><span class="s1"> 
+    drop_list = [] </span><span class="s2">#people to be dropped from workshop list</span><span class="s1"> 
+    </span><span class="s2">#print(&quot;index number of last person in workshop is:&quot;, top)</span><span class="s1"> 
+    </span><span class="s2">#print(second_list)</span><span class="s1"> 
+    drop_people = second_list.sample(reduction_size) 
+    print (</span><span class="s3">&quot;The People to be removed are:&quot;</span><span class="s1">, drop_people) 
+ 
+    reassign = drop_people 
+    </span><span class="s0">global </span><span class="s1">second_choices 
+    second_choices = second_choices.merge(reassign, how=</span><span class="s3">'outer'</span><span class="s1">) 
+    drop_rows = list(drop_people.index) 
+    </span><span class="s2">#print(drop_rows)</span><span class="s1"> 
+    second_list.drop(drop_rows, inplace = </span><span class="s0">True</span><span class="s1">) 
+    print(</span><span class="s3">&quot;The new workshop is:&quot;</span><span class="s1">, second_list) 
+    </span><span class="s2">#print (&quot;Enrollees are:&quot;, second_list)</span><span class="s1"> 
+    </span><span class="s0">return </span><span class="s1">second_list 
+    </span><span class="s3">'''dropping = pd.DataFrame(drop_list) 
+    #print(&quot;People to be dropped:&quot;, dropping) 
+ 
+    for d in range(len(drop_list)): #drops reassigned people from workshop list. 
+        #print(&quot;index to be dropped:&quot;, dropping.index[d]) 
+        drop = dropping.index[d] 
+        second_list = second_list[second_list.index != drop] 
+ 
+ 
+    print(&quot;Workshop enrolless:&quot;, second_list) 
+ 
+    print(&quot;people to be reassigned:&quot;, second_choices) 
+    return second_list 
+    '''</span><span class="s1"> 
+</span><span class="s0">def </span><span class="s1">max_enrolles(workshop_number): 
+    max_enroll = workshop_list.loc[workshop_number-</span><span class="s4">1</span><span class="s1">][</span><span class="s4">2</span><span class="s1">] 
+    </span><span class="s2">#print (max_enroll)</span><span class="s1"> 
+    </span><span class="s0">return </span><span class="s1">max_enroll 
+ 
+</span><span class="s0">def </span><span class="s1">second_assign (reassign_list, workshop_num, isFull): </span><span class="s2">#assigns the reassign list to their second choice</span><span class="s1"> 
+    new_workshop = reassign_list.head(</span><span class="s4">0</span><span class="s1">) 
+    current_assignments = split_workshop(workshop_assignments, workshop_num, first_choice_col) 
+    print(</span><span class="s3">&quot;The current enrolless are:&quot;</span><span class="s1">, current_assignments) 
+    print(</span><span class="s3">&quot;length of current assignments:&quot;</span><span class="s1">, len(current_assignments)) 
+    </span><span class="s2">#print(&quot;The length to be removed&quot;, len(reassign_list))</span><span class="s1"> 
+    number_to_reassign = len(reassign_list) 
+    print (</span><span class="s3">&quot;number ro reassign&quot;</span><span class="s1">, number_to_reassign) 
+    </span><span class="s2">#if (isFull ==True):</span><span class="s1"> 
+    </span><span class="s0">if </span><span class="s1">( (len(current_assignments) - len(reassign_list))&gt; </span><span class="s4">0</span><span class="s1">): </span><span class="s2">#are the number of people currently in the workshop</span><span class="s1"> 
+ 
+ 
+            </span><span class="s2"># the same as the number that need to be reassigned to it?</span><span class="s1"> 
+ 
+       </span><span class="s2">#spaces remaining</span><span class="s1"> 
+       print(</span><span class="s3">&quot;Number to be reassigned:&quot;</span><span class="s1">, number_to_reassign) 
+    </span><span class="s2">#input(&quot;resassign?&quot;)#how many need to be knocked out of the current list to make space.</span><span class="s1"> 
+       remained_enrolled = second_choice(workshop_num, current_assignments, number_to_reassign)</span><span class="s2"># knocks out the necessary people.</span><span class="s1"> 
+       </span><span class="s0">if</span><span class="s1">(reassign_list.empty == </span><span class="s0">False</span><span class="s1">): 
+           print(</span><span class="s3">&quot;Something to merge&quot;</span><span class="s1">) 
+           new_workshop = remained_enrolled.merge(reassign_list,how=</span><span class="s3">'outer'</span><span class="s1">)  </span><span class="s2"># merges the remaining enrollees with the second choice ones.</span><span class="s1"> 
+       </span><span class="s0">if</span><span class="s1">(reassign_list.empty==</span><span class="s0">True</span><span class="s1">): 
+           print(</span><span class="s3">&quot;nothing to merge.&quot;</span><span class="s1">) 
+           new_workshop= remained_enrolled 
+       print(</span><span class="s3">&quot;New workshop is:&quot;</span><span class="s1">, new_workshop) 
+       new_workshop = assign_workshop(new_workshop, workshop_num) </span><span class="s2"># officially assigns the workshop</span><span class="s1"> 
+       print(</span><span class="s3">&quot;assigned workshop is:&quot;</span><span class="s1">, new_workshop) 
+       </span><span class="s0">return </span><span class="s1">new_workshop 
+ 
+    </span><span class="s0">else</span><span class="s1">: 
+ 
+        </span><span class="s2">#if (isFull == False):</span><span class="s1"> 
+        </span><span class="s2">#space_left = max_enrolles(workshop_num) - len(current_assignments)</span><span class="s1"> 
+ 
+        input(</span><span class="s3">&quot;resassign?&quot;</span><span class="s1">) 
+        remained_enrolled = second_choice(workshop_num, current_assignments, number_reassign) 
+        new_workshop = remained_enrolled.merge(reassign_list , how = </span><span class="s3">'outer'</span><span class="s1">) 
+        print (</span><span class="s3">&quot;New workshop is:&quot;</span><span class="s1">, new_workshop) 
+        new_workshop = assign_workshop(new_workshop, workshop_num) 
+        print (</span><span class="s3">&quot;assigned workshop is:&quot;</span><span class="s1">, new_workshop) 
+        </span><span class="s0">return </span><span class="s1">new_workshop 
+    </span><span class="s2">#for each workshop, take list of first choices in that workshop, randomly choose one and send it to second choice function.</span><span class="s1"> 
+    </span><span class="s2">#then insert overflow workshop.</span><span class="s1"> 
+ 
+ 
+</span><span class="s2">#column_list = workshop_list[0][1]</span><span class="s1"> 
+workshop_assignments = registrants.head(</span><span class="s4">1</span><span class="s1">) 
+second_choices = registrants.head(</span><span class="s4">0</span><span class="s1">) 
+count =</span><span class="s4">0</span><span class="s1"> 
+Reassign_count =</span><span class="s4">0</span><span class="s1"> 
+ 
+</span><span class="s0">while </span><span class="s1">count &lt; len(workshop_list.index): </span><span class="s2">#loop that runs the program</span><span class="s1"> 
+    </span><span class="s2">#print(workshop_list.loc[c][0])</span><span class="s1"> 
+    workshop_max = workshop_list.loc[count][</span><span class="s4">2</span><span class="s1">] 
+    number = workshop_list.loc[count][</span><span class="s4">0</span><span class="s1">] 
+    print (</span><span class="s3">&quot;The max for this workshop is:&quot;</span><span class="s1">, workshop_max) 
+    print(</span><span class="s3">&quot;the workshop number is:&quot;</span><span class="s1">, number) 
+    next_workshop = split_workshop(registrants, workshop_list.loc[count][</span><span class="s4">0</span><span class="s1">], first_choice_col) 
+    overfull = check_workshop(number, next_workshop) 
+    </span><span class="s2">#print (&quot;Is this workshop full?&quot;, overfull)</span><span class="s1"> 
+    </span><span class="s2">#maximum = workshop_list.loc[count][2]</span><span class="s1"> 
+    </span><span class="s2">#print(proposed_workshop)</span><span class="s1"> 
+    </span><span class="s0">if </span><span class="s1">(overfull == </span><span class="s0">True</span><span class="s1">): 
+        </span><span class="s2">#print(&quot;the workshop is full&quot;)</span><span class="s1"> 
+        proposed_workshop = second_choice(number, next_workshop, workshop_max) 
+        workshop_assigned = assign_workshop(proposed_workshop, number) 
+        </span><span class="s2"># adds the workshop assignment to the workshop assignment</span><span class="s1"> 
+        </span><span class="s2">#print(&quot;Workshop assignments are:&quot;)</span><span class="s1"> 
+        </span><span class="s2">#print(workshop_assigned)</span><span class="s1"> 
+        workshop_assignments = workshop_assignments.merge(proposed_workshop, how = </span><span class="s3">'outer'</span><span class="s1">) 
+    </span><span class="s0">if </span><span class="s1">(overfull == </span><span class="s0">False</span><span class="s1">): 
+        </span><span class="s2">#print(&quot;the workshop is not full&quot;)</span><span class="s1"> 
+        workshop_assigned = assign_workshop(next_workshop, workshop_list.loc[count][</span><span class="s4">0</span><span class="s1">])  </span><span class="s2"># adds the workshop assignment to the workshop assignment column</span><span class="s1"> 
+        </span><span class="s2">#print(&quot;Workshop assignments are:&quot;)</span><span class="s1"> 
+        </span><span class="s2">#print(workshop_assigned)</span><span class="s1"> 
+        workshop_assignments = workshop_assignments.merge(workshop_assigned, how = </span><span class="s3">'outer'</span><span class="s1">) 
+    count +=</span><span class="s4">1</span><span class="s1"> 
+    </span><span class="s2">#input(&quot;Press enter&quot;)</span><span class="s1"> 
+</span><span class="s2">#next_workshop = check_workshop(workshop_list.loc[2][0], single_workshop)</span><span class="s1"> 
+</span><span class="s2">#print(next_workshop)</span><span class="s1"> 
+ 
+print(</span><span class="s3">&quot;people in workshops:&quot;</span><span class="s1">, workshop_assignments) 
+print(</span><span class="s3">&quot;People to be reassigned:&quot;</span><span class="s1">, second_choices) 
+new_workshop_list = workshop_assignments.head(</span><span class="s4">0</span><span class="s1">) 
+</span><span class="s2">#input(&quot;press enter&quot;)</span><span class="s1"> 
+</span><span class="s0">while </span><span class="s1">Reassign_count &lt; len(workshop_list.index): 
+    wksp_number = workshop_list.loc[Reassign_count][</span><span class="s4">0</span><span class="s1">] 
+    max = workshop_list.loc[Reassign_count][</span><span class="s4">2</span><span class="s1">] 
+    print(</span><span class="s3">&quot;workshop number:&quot;</span><span class="s1">, wksp_number) 
+    input(</span><span class="s3">&quot;Press enter 1&quot;</span><span class="s1">) 
+    breakout_workshop = split_workshop(second_choices, wksp_number, second_choice_col) 
+    print(</span><span class="s3">&quot;breakout workshop:&quot;</span><span class="s1">, breakout_workshop) 
+    input(</span><span class="s3">&quot;press enter 2&quot;</span><span class="s1">) 
+    full = check_workshop(wksp_number, breakout_workshop) 
+    print (full) 
+    input(</span><span class="s3">&quot;press enter 3&quot;</span><span class="s1">) 
+    assigned_participants = second_assign(breakout_workshop, wksp_number, full) 
+    print(</span><span class="s3">&quot;people assigned&quot;</span><span class="s1">, assigned_participants) 
+    input(</span><span class="s3">&quot;press enter 4&quot;</span><span class="s1">) 
+    workshop_done  = assign_workshop(assigned_participants, wksp_number) 
+    new_workshop_list = new_workshop_list.merge(workshop_done, how=</span><span class="s3">'outer'</span><span class="s1">) 
+    print(</span><span class="s3">&quot;New workshop list:&quot;</span><span class="s1">, new_workshop_list) 
+    input(</span><span class="s3">&quot;press enter 5&quot;</span><span class="s1">) 
+    Reassign_count+=</span><span class="s4">1</span><span class="s1"> 
+    input(</span><span class="s3">&quot;press enter.&quot;</span><span class="s1">) 
+print(</span><span class="s3">&quot;people in workshops:&quot;</span><span class="s1">, workshop_assignments) 
+print(</span><span class="s3">&quot;People to be reassigned:&quot;</span><span class="s1">, second_choices)</span></pre>
+</body>
+</html>
